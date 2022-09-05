@@ -1,4 +1,4 @@
-## MDN Web docs - JavaScript first steps
+## MDN Web docs - JavaScript
 
 ### Project Brief:
 To gain familiarity with what JavaScript is, what it can do, and how it fits into a web site.
