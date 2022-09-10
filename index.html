@@ -1,29 +1,81 @@
 <!DOCTYPE html>
-<html lang="en-us>
-    <head>
-        <meta charset="utf-8"></html>
-        <title>Number guessing game</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Function start</title>
+    <style>
+      .msgBox {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 242px;
+        background: #eee;
+      }
 
-    <body>
-        <h1>Number guessing game</h1>
+      .msgBox p {
+        line-height: 1.5;
+        padding: 10px 20px;
+        color: #333;
+        padding-left: 82px;
+        background-position: 25px center;
+        background-repeat: no-repeat;
+      }
 
-        <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
+      .msgBox button {
+        background: none;
+        border: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 1.1rem;
+        color: #aaa;
+      }
 
-        <div class="form">
-            <label for="guessField">Enter a guess: </label>
-            <input type="number" min="1" max="100" required id="guessField" class="guessField">
-            <input type="submit" value="Submit guess" class="guessSubmit">
-        </div>
+    </style>
+  </head>
+  <body>
+    <button>Display message box</button>
 
-        <div class="resultParas">
-            <p class="guesses"></p>
-            <p class="lastResult"></p>
-            <p class="lowOrHi"></p>
-        </div>
+    <script>
 
-        <script src="scrips.js"></script>
+    const btn = document.querySelector('button');
+    btn.addEventListener('click', () => displayMessage('Your inbox is almost full - delete some mails', 'chat')); 
+    
+    function displayMessage(msgText, msgType) {
 
-    </body>
+    const body = document.body;
+
+    const panel = document.createElement('div');
+    panel.setAttribute('class', 'msgBox');
+    body.appendChild(panel);
+
+    const msg = document.createElement('p');
+    msg.textContent = msgText;
+    panel.appendChild(msg);
+
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = 'x';
+    panel.appendChild(closeBtn);
+
+    closeBtn.addEventListener('click', () => panel.parentNode.removeChild(panel));
+    
+    if (msgType === 'warning') {
+    msg.style.backgroundImage = 'url(icons/warning.png)';
+    panel.style.backgroundColor = 'red';
+    } else if (msgType === 'chat') {
+    msg.style.backgroundImage = 'url(icons/chat.png)';
+    panel.style.backgroundColor = 'aqua';
+    } else {
+    msg.style.paddingLeft = '20px';
+    }
+
+    }
+
+  
+
+      
+    </script>
+  </body>
 </html>
