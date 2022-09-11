@@ -1,82 +1,110 @@
-let randomNumber = Math.floor(Math.random() * 100) + 1;
+// setup canvas
 
-const guesses = document.querySelector('.guesses');
-const lastResult = document.querySelector('.lastResult');
-const lowOrHi = document.querySelector('.lowOrHi');
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
 
-const guessSubmit = document.querySelector('.guessSubmit');
-const guessField = document.querySelector('.guessField');
+const width = canvas.width = window.innerWidth;
+const height = canvas.height = window.innerHeight;
 
-let guessCount = 1;
-let resetButton;
+// function to generate random number
 
-guessField.focus();
+function random(min, max) {
+  const num = Math.floor(Math.random() * (max - min + 1)) + min;
+  return num;
+}
 
+// function to generate random color
 
-function checkGuess() {
-    const userGuess = Number(guessField.value);
-    if (guessCount === 1) {
-      guesses.textContent = 'Previous guesses: ';
-    }
-    guesses.textContent += `${userGuess} `;
+function randomRGB() {
+  return `rgb(${random(0, 255)},${random(0, 255)},${random(0, 255)})`;
+}
+
+class Ball {
+  constructor(x, y, velX, velY, color, size) {
+    this.x = x;
+    this.y = y;
+    this.velX = velX;
+    this.velY = velY;
+    this.color = color;
+    this.size = size;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+    ctx.fill();
+  }
   
-    if (userGuess === randomNumber) {
-      lastResult.textContent = 'Congratulations! You got it right!';
-      lastResult.style.backgroundColor = 'green';
-      lowOrHi.textContent = '';
-      setGameOver();
-    } else if (guessCount === 10) {
-      lastResult.textContent = '!!!GAME OVER!!!';
-      lowOrHi.textContent = '';
-      setGameOver();
-    } else {
-      lastResult.textContent = 'Wrong!';
-      lastResult.style.backgroundColor = 'red';
-      if (userGuess < randomNumber) {
-        lowOrHi.textContent = 'Last guess was too low!';
-      } else if (userGuess > randomNumber) {
-        lowOrHi.textContent = 'Last guess was too high!';
+  update() {
+    if ((this.x + this.size) >= width) {
+      this.velX = -(this.velX);
+    }
+  
+    if ((this.x - this.size) <= 0) {
+      this.velX = -(this.velX);
+    }
+  
+    if ((this.y + this.size) >= height) {
+      this.velY = -(this.velY);
+    }
+  
+    if ((this.y - this.size) <= 0) {
+      this.velY = -(this.velY);
+    }
+  
+    this.x += this.velX;
+    this.y += this.velY;
+  }
+
+  collisionDetect() {
+    for (const ball of balls) {
+      if (this !== ball) {
+        const dx = this.x - ball.x;
+        const dy = this.y - ball.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+  
+        if (distance < this.size + ball.size) {
+          ball.color = this.color = randomRGB();
+        }
       }
     }
-  
-    guessCount++;
-    guessField.value = '';
-    guessField.focus();
-  }
-
-  guessSubmit.addEventListener('click', checkGuess);
-
-  function setGameOver() {
-    guessField.disabled = true;
-    guessSubmit.disabled = true;
-    resetButton = document.createElement('button');
-    resetButton.textContent = 'Start new game';
-    document.body.append(resetButton);
-    resetButton.addEventListener('click', resetGame);
-  }
-
-  function resetGame() {
-    guessCount = 1;
-  
-    const resetParas = document.querySelectorAll('.resultParas p');
-    for (const resetPara of resetParas) {
-      resetPara.textContent = '';
-    }
-  
-    resetButton.parentNode.removeChild(resetButton);
-  
-    guessField.disabled = false;
-    guessSubmit.disabled = false;
-    guessField.value = '';
-    guessField.focus();
-  
-    lastResult.style.backgroundColor = 'white';
-  
-    randomNumber = Math.floor(Math.random() * 100) + 1;
   }
   
   
+}
+
+const balls = [];
+
+while (balls.length < 25) {
+  const size = random(10,20);
+  const ball = new Ball(
+    // ball position always drawn at least one ball width
+    // away from the edge of the canvas, to avoid drawing errors
+    random(0 + size, width - size),
+    random(0 + size, height - size),
+    random(-7, 7),
+    random(-7, 7),
+    randomRGB(),
+    size
+  );
+
+  balls.push(ball);
+}
+
+function loop() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+  ctx.fillRect(0, 0, width, height);
+
+  for (const ball of balls) {
+    ball.draw();
+    ball.update();
+    ball.collisionDetect();
+  }
+
+  requestAnimationFrame(loop);
+}
+
+loop();
 
 
-  
- 
