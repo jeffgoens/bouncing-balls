@@ -1,7 +1,7 @@
-## MDN Web docs - JavaScript
+## Onboarding Sprint 4 - Build MDN Bouncing Balls
 
 ### Project Brief:
-To gain familiarity with what JavaScript is, what it can do, and how it fits into a web site.
+Create a webpage that simulates bouncing balls on an HTML canvas using physics, math and JavaScript Objects and Classes. For this project, we will be using MDN's Bouncing Ball Tutorial and expanding their baseline project.
 
 ### Link to MDN docs page:
-https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/What_is_JavaScript#a_high-level_definition
+https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_building_practice#lets_bounce_some_balls
